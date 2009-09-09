@@ -1,0 +1,155 @@
+#!perl
+use strict;
+use warnings;
+use autodie;
+use POSIX qw( floor ceil );
+use Carp qw( confess );
+use Config '%Config';
+use Imager;
+sub FORALL_SV (&);
+sub FORALL_RAW_SV (&);
+$SIG{$_} = \&confess for qw( __WARN__ __DIE__ );
+
+
+# Configure
+# TODO: Getopt::Long
+#
+my $ptrsize = $Config{ptrsize};
+my $truncate_bits = 0;
+my $output_fn = "memory-$truncate_bits.png";
+
+# Read all memory
+#
+my $MEMORY;
+{
+    local $/;
+    $MEMORY = <STDIN>;
+}
+
+
+# Get the bounds of memory
+#
+my ( $min, $max );
+FORALL_RAW_SV {
+    my ( $arena, $head, $body ) = @{$_[0]};
+    $min = min( $min, $arena, $head, $body );
+    $max = max( $max, $arena, $head, $body );
+};
+my $extent = $max - $min;
+my $scale  = 0.001;
+print "min=${h($min)} max=${h($max)} extent=${h($extent)}\n";
+
+# Make an image sized to memory
+#
+my $xsize = 200;
+my $ysize = ceil( $scale * $extent );
+my $xmax = $xsize - 1;
+my $ymax = $ysize - 1;
+print "xmax=${h($xmax)} ymax=${h($ymax)}\n";
+unlink $output_fn while -e $output_fn;
+my $imager = Imager->new(
+    xsize     => $xmax,
+    ysize     => $ymax,
+)
+    or die "Can't create image: ".Imager->errstr;
+$imager->box( filled => 1, color => sprintf( '#%02x%02x%02x', rand 256, rand 256, rand 256 ) );
+
+FORALL_SV {
+    line( 0,  int( $_[0][0] ), 99,  int( $_[0][1] ) );
+    line( 99, int( $_[0][1] ), 199, int( $_[0][2] ) );
+};
+$imager->write( file => $output_fn )
+  or die "Can't write to memory.png: " . $imager->errstr;
+undef $imager;
+system "ls -lh $output_fn open $output_fn";
+
+sub h {
+    my ( $num ) = @_;
+    1 while $num =~ s/(?<=\d)(\d{3})(?:_|$)/_$1/;
+    \ $num;
+}
+sub line {
+    $_[1] = truncate_ptr( $_[1] );
+    $_[3] = truncate_ptr( $_[3] );
+
+    $_[0] <= $xmax or confess "x1=$_[0] !<= $xmax";
+    $_[1] <= $ymax or confess "y1=$_[1] !<= $ymax";
+    $_[2] <= $xmax or confess "x2=$_[2] !<= $xmax";
+    $_[3] <= $ymax or confess "y2=$_[3] !<= $ymax";
+    # print "$_[0]x$_[1] -- $_[2]x$_[3]\n";
+    $imager->line(
+	color => sprintf( '#%02x%02x%02x', rand 256, rand 256, rand 256 ),
+        aa => 0,
+	x1 => $_[0], y1 => $_[1],
+	x2 => $_[2], y2 => $_[3] );
+}
+sub truncate_ptr {
+    my ( $ptr ) = @_;
+    $ptr >>= $truncate_bits;
+    $ptr <<= $truncate_bits;
+    return $ptr;
+}
+sub FORALL_SV (&) {
+    my ( $f ) = @_;
+    FORALL_RAW_SV {
+	
+        for ( @{$_[0]} ) {
+	    if ( $_ ) {
+		#print "$_ -> ";
+		$_ -= $min;
+		#print "$_ -> ";
+		$_ *= $scale;
+		$_ = floor( $_ );
+		#print "$_\n";
+	    }
+	}
+        $f->($_[0]);
+    };
+}
+
+sub FORALL_RAW_SV (&) {
+    my ( $f ) = @_;
+
+    for (
+        my $offset = 0;
+        $offset < length $MEMORY;
+        $offset += 3 * $ptrsize
+    ) {
+        my ( $arena, $head, $body ) =
+            unpack 'l3',
+            substr $MEMORY, $offset, 3 * $ptrsize;
+	
+
+        $f->( [ $arena, $head, $body ] );
+    }
+}
+
+sub min;
+sub max;
+BEGIN {
+    for (
+        [ min => '<' ],
+        [ max => '>' ],
+    ) {
+        my ( $name, $operator ) = @$_;
+        eval "
+            sub $name {
+                my \$val;
+                for ( \@_ ) {
+                    next if ! \$_;
+                    if ( \$_
+                         && (
+                             ( ! defined \$val )
+                             || \$_ $operator \$val
+                         )
+                    ) {
+                        \$val = \$_;
+                    }
+                }
+                \$val
+            }
+            1;
+        "
+            or die $@;
+    }
+}
