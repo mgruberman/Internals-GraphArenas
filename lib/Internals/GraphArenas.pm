@@ -65,3 +65,33 @@ L<http://diotalevi.isa-geek.net/~josh/090909/memory-0.png>, there's no
 chunking but when you look at
 L<http://diotalevi.isa-geek.net/~josh/090909/memory-4.png>, the bottom
 4 bits were zeroed out.
+
+=head1 INSTALLATION
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+=head1 DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+  Imager
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Joshua ben Jore, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=head1 SOURCE AVAILABILITY
+
+This source is in Github: L<git://github.com/jbenjore/internals-dumparenas.git>
+
+=head1 AUTHOR
+
+Written by Josh ben Jore with inspiration from Spoon's L<http://netjam.org/spoon/viz/>
