@@ -13,7 +13,8 @@ BEGIN {
 }
 
 1;
-__DATA__
+__END__
+
 =head1 NAME
 
 Internals::GraphArenas - chart a map of where perl locates data
@@ -67,7 +68,7 @@ deal. If SV heads weren't clustered then reference count changes could
 have affected lots of other pages.
 
 Anyway, there's a nice little set of pics at
-L<http://diotalevi.isa-geek.net/~josh/090909/. I started truncating
+L<http://diotalevi.isa-geek.net/~josh/090909/>. I started truncating
 precision by powers of two to get things to visually chunk up more. So
 when you look at
 L<http://diotalevi.isa-geek.net/~josh/090909/memory-0.png>, there's no
