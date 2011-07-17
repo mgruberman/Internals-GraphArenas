@@ -2,13 +2,13 @@ NAME
     Internals::GraphArenas - chart a map of where perl locates data
 
 SYNOPSIS
-    In F<your-script.pl>
+    In your-script.pl
 
       #!perl
       use Internals::GraphArenas;
       Internals::graph_arenas(); # Prints many C pointers to STDOUT
 
-    Pipe it to F<chart-memory>:
+    Pipe it to chart-memory:
 
       $ ./your-script.pl | chart-memory
 
@@ -16,6 +16,7 @@ SYNOPSIS
 
       $ open memory-0.png
 
+DESCRIPTION
     Charts your perl's arenas memory as described at
     <http://use.perl.org/~jjore/journal/39604> and reproduced below
 
@@ -44,12 +45,13 @@ BLOG POST
     lots of other pages.
 
     Anyway, there's a nice little set of pics at
-    "/diotalevi.isa-geek.net/~josh/090909/. I started truncating precision
-    by powers of two to get things to visually chunk up more. So when you
-    look at <http://diotalevi.isa-geek.net/~josh/090909/memory-0.png>,
-    there's no chunking but when you look at
+    <http://diotalevi.isa-geek.net/~josh/090909/>. I started truncating
+    precision by powers of two to get things to visually chunk up more. So
+    when you look at
+    <http://diotalevi.isa-geek.net/~josh/090909/memory-0.png>, there's no
+    chunking but when you look at
     <http://diotalevi.isa-geek.net/~josh/090909/memory-4.png>, the bottom 4
-    bits were zeroed out." in http:
+    bits were zeroed out.
 
 INSTALLATION
     To install this module type the following:
@@ -72,19 +74,9 @@ COPYRIGHT & LICENSE
 
 SOURCE AVAILABILITY
     This source is in Github:
-    <git://github.com/jbenjore/internals-dumparenas.git>
+    <git://github.com/jbenjore/Internals-GraphArenas.git>
 
 AUTHOR
     Written by Josh ben Jore with inspiration from Spoon's
     <http://netjam.org/spoon/viz/>
-
-POD ERRORS
-    Hey! The above document had some coding errors, which are explained
-    below:
-
-    Around line 28:
-        Unknown directive: =head
-
-    Around line 60:
-        Unterminated L<...> sequence
 

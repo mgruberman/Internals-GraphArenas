@@ -35,7 +35,7 @@ Open the output:
 
   $ open memory-0.png
 
-=head DESCRIPTION
+=head1 DESCRIPTION
 
 Charts your perl's arenas memory as described at
 L<http://use.perl.org/~jjore/journal/39604> and reproduced below
