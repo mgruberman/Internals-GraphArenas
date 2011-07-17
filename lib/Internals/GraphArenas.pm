@@ -20,13 +20,13 @@ Internals::GraphArenas - chart a map of where perl locates data
 
 =head1 SYNOPSIS
 
-In your-script.pl
+In F<your-script.pl>
 
   #!perl
   use Internals::GraphArenas;
   Internals::graph_arenas(); # Prints many C pointers to STDOUT
 
-Pipe it to chart-memory:
+Pipe it to F<chart-memory>:
 
   $ ./your-script.pl | chart-memory
 
