@@ -1,8 +1,17 @@
 package Internals::GraphArenas;
+
+use strict;
+use warnings;
+
 use 5.007_003;
+
 use XSLoader ();
-our $VERSION = '0.01';
-XSLoader::load('Internals::GraphArenas', $VERSION);
+
+BEGIN {
+    our $VERSION = '0.01';
+    XSLoader::load('Internals::GraphArenas', $VERSION);
+}
+
 1;
 __DATA__
 =head1 NAME
@@ -15,7 +24,7 @@ In your-script.pl
 
   #!perl
   use Internals::GraphArenas;
-  Internals::GraphArenas::graph_arenas(); # Prints many C pointers to STDOUT
+  Internals::graph_arenas(); # Prints many C pointers to STDOUT
 
 Pipe it to chart-memory:
 
@@ -90,7 +99,7 @@ under the same terms as Perl itself.
 
 =head1 SOURCE AVAILABILITY
 
-This source is in Github: L<git://github.com/jbenjore/internals-dumparenas.git>
+This source is in Github: L<git://github.com/jbenjore/Internals-GraphArenas.git>
 
 =head1 AUTHOR
 
