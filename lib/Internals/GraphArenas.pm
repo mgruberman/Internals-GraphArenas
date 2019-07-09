@@ -1,23 +1,33 @@
 package Internals::GraphArenas;
+
+use strict;
+use warnings;
+
 use 5.007_003;
+
 use XSLoader ();
-our $VERSION = '0.01';
-XSLoader::load('Internals::GraphArenas', $VERSION);
+
+BEGIN {
+    our $VERSION = '0.01';
+    XSLoader::load('Internals::GraphArenas', $VERSION);
+}
+
 1;
-__DATA__
+__END__
+
 =head1 NAME
 
 Internals::GraphArenas - chart a map of where perl locates data
 
 =head1 SYNOPSIS
 
-In your-script.pl
+In F<your-script.pl>
 
   #!perl
   use Internals::GraphArenas;
-  Internals::GraphArenas::graph_arenas(); # Prints many C pointers to STDOUT
+  Internals::graph_arenas(); # Prints many C pointers to STDOUT
 
-Pipe it to chart-memory:
+Pipe it to F<chart-memory>:
 
   $ ./your-script.pl | chart-memory
 
@@ -25,7 +35,7 @@ Open the output:
 
   $ open memory-0.png
 
-=head DESCRIPTION
+=head1 DESCRIPTION
 
 Charts your perl's arenas memory as described at
 L<http://use.perl.org/~jjore/journal/39604> and reproduced below
@@ -58,7 +68,7 @@ deal. If SV heads weren't clustered then reference count changes could
 have affected lots of other pages.
 
 Anyway, there's a nice little set of pics at
-L<http://diotalevi.isa-geek.net/~josh/090909/. I started truncating
+L<http://diotalevi.isa-geek.net/~josh/090909/>. I started truncating
 precision by powers of two to get things to visually chunk up more. So
 when you look at
 L<http://diotalevi.isa-geek.net/~josh/090909/memory-0.png>, there's no
@@ -90,7 +100,7 @@ under the same terms as Perl itself.
 
 =head1 SOURCE AVAILABILITY
 
-This source is in Github: L<git://github.com/jbenjore/internals-dumparenas.git>
+This source is in Github: L<git://github.com/jbenjore/Internals-GraphArenas.git>
 
 =head1 AUTHOR
 

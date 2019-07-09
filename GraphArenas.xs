@@ -36,7 +36,7 @@ my_visit( SVFUNC2_t f, U32 flags, U32 mask)
                 && (sv->sv_flags & mask) == flags
                 && SvREFCNT(sv))
             {
-                (*f)( sva, sv );
+                (*f)( aTHX_ sva, sv );
             }
         }
     }
